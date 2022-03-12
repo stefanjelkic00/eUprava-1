@@ -28,9 +28,25 @@
 
 ## Installation
 
+### Prerequisites
+
+ - MongoDB server
+ - node
+ - docker
+ - docker compose
+ - npm
+
 ```bash
 $ npm install
 ```
+
+## Docker compose setup
+```console
+docker compose run -rm install
+docker compose up -d
+```
+
+Server is exposed at port 3101
 
 ## Running the app
 
