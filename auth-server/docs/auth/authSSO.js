@@ -17,7 +17,7 @@ var AuthSSO = function ({ host }) {
     },
     // successUrl: URL for redirection after logout
     logout: async ({ successUrl }) => {
-      window.open(`${host}/auth/logout?successUrl=${successUrl}`, 'self');
+      window.open(`${host}/auth/logout?successUrl=${successUrl}`, '_self');
     },
   };
 };

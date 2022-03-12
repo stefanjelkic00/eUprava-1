@@ -46,7 +46,7 @@ From `/docs/authSSO.js` paste the code into your application and use it for URL 
 
 ## Docker compose setup
 ```console
-docker compose run -rm install
+docker compose run --rm install
 docker compose up -d
 ```
 
