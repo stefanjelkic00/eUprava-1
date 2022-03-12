@@ -40,6 +40,10 @@
 $ npm install
 ```
 
+## Javascript integration
+
+From `/docs/authSSO.js` paste the code into your application and use it for URL callback driven SSO auth
+
 ## Docker compose setup
 ```console
 docker compose run -rm install
