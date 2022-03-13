@@ -9,11 +9,11 @@ var AuthSSO = function ({ host }) {
       return await res.json();
     },
     // successUrl: URL for redirection after login
-    login: async ({ successUrl }) => {
+    login: ({ successUrl }) => {
       window.open(`${host}/auth/login?successUrl=${successUrl}`, '_self');
     },
     // successUrl: URL for redirection after logout
-    logout: async ({ successUrl }) => {
+    logout: ({ successUrl }) => {
       window.open(`${host}/auth/logout?successUrl=${successUrl}`, '_self');
     },
   };
