@@ -3,13 +3,10 @@ var AuthSSO = function ({ host }) {
     throw Error('need to pass in target host SSO server');
   }
   return {
-    // successUrl: URL for redirection if user is logged in
-    // failUrl: URL for redirection if user is not logged in
-    check: async ({ successUrl, failUrl }) => {
-      window.open(
-        `${host}/auth/check?successUrl=${successUrl}&failUrl=${failUrl}`,
-        '_self',
-      );
+    // verify JWT against auth server
+    verify: async ({ token }) => {
+      const res = await fetch(`${host}/auth/verify_token/${token}`);
+      return await res.json();
     },
     // successUrl: URL for redirection after login
     login: async ({ successUrl }) => {

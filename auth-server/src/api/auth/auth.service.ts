@@ -32,4 +32,10 @@ export class AuthService {
     };
     return this.jwtService.sign(payload);
   }
+
+  async findUserByUsername(username: string) {
+    const retVal = await this.userService.findByUsername(username);
+    retVal.password = undefined;
+    return retVal;
+  }
 }

@@ -1,6 +1,8 @@
 import {
   Controller,
   Get,
+  HttpException,
+  HttpStatus,
   Param,
   Post,
   Query,
@@ -22,21 +24,28 @@ export class AuthController {
     @Res() res: Response,
     @Query() query,
   ) {
+    const { successUrl, hasError } = query;
+    if (!successUrl) {
+      return res.json({ message: 'successUrl query parameter needed' });
+    }
     try {
       await this.authService.verifyToken(session.user);
-      const url = new URL(query.successUrl);
+      const url = new URL(successUrl);
       url.searchParams.append('token', session.user);
       return res.redirect(url.toString());
     } catch (e) {
       session.destroy();
-      return res.render('login.hbs', { hasError: query.hasError });
+      return res.render('login.hbs', { hasError: hasError });
     }
   }
 
   @Get('logout')
   async logout(@Res() res: Response, @Query() query, @Session() session) {
-    session.destroy();
     const { successUrl } = query;
+    if (!successUrl) {
+      return res.json({ message: 'successUrl query parameter needed' });
+    }
+    session.destroy();
     return res.redirect(successUrl);
   }
 
@@ -65,35 +74,22 @@ export class AuthController {
     return res.redirect(url.toString());
   }
 
-  @Get('check')
-  async check(
-    @Req() req: Request,
-    @Res() res: Response,
-    @Session() session,
-    @Query() query,
-  ) {
-    const { successUrl, failUrl } = query;
-    if (!successUrl) {
-      return { message: 'successUrl missing from URL params' };
-    }
-    if (!failUrl) {
-      return { message: 'failUrl missing from URL params' };
-    }
-    const user: string = session.user;
-    try {
-      await this.authService.verifyToken(user);
-      const url = new URL(successUrl);
-      url.searchParams.append('token', user);
-      res.redirect(url.toString());
-    } catch (e) {
-      session.destroy();
-      const url = new URL(failUrl);
-      res.redirect(url.toString());
-    }
-  }
-
   @Get('verify_token/:token')
   async verifyToken(@Param('token') token: string) {
-    return await this.authService.verifyToken(token);
+    try {
+      const jwtToken = await this.authService.verifyToken(token);
+      const user = await this.authService.findUserByUsername(
+        jwtToken.username as string,
+      );
+      return {
+        claims: jwtToken,
+        user: user,
+      };
+    } catch (e) {
+      throw new HttpException(
+        { status: HttpStatus.UNAUTHORIZED, error: 'Invalid token' },
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
   }
 }
