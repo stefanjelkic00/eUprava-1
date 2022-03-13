@@ -1,7 +1,8 @@
 version: "3"
 
 x-base-service: &base-service
-  image: node:lts
+  build:
+    dockerfile: Dockerfile.dev
   volumes:
     - nodemodules:/usr/src/app/node_modules
     - .:/usr/src/app
