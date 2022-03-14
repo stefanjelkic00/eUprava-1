@@ -8,6 +8,10 @@ import * as path from 'path';
       provide: ConfigService,
       useValue: new ConfigService(
         (function () {
+          console.log(
+            'setting up config service with env:',
+            process.env.NODE_ENV,
+          );
           return path.resolve(
             __dirname,
             '..',
