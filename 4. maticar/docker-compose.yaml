@@ -33,12 +33,12 @@ services:
     ports:
       - "8080:80"
     depends_on:
-      mysqlDB:
+      mysql:
         condition: service_healthy
-      redisDB:
+      redis:
         condition: service_healthy
 
-  mysqlDB:
+  mysql:
     image: mysql:8.0.23
     container_name: mysql
     ports:
@@ -47,7 +47,7 @@ services:
       MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DB}
     volumes:
-      - mysqlDB:/var/lib/mysql
+      - mysql:/var/lib/mysql
       - ./init_db:/docker-entrypoint-initdb.d
     networks:
       maticar:
@@ -60,12 +60,12 @@ services:
       retries: 3
       start_period: 20s
 
-  redisDB:
+  redis:
     image: redis:6.2.0
     container_name: redis
     command: redis-server --appendonly yes
     volumes:
-      - redisDB:/data
+      - redis:/data
     ports:
       - "6379:6379"
     networks:
@@ -80,7 +80,7 @@ services:
       start_period: 20s
 
 volumes:
-  mysqlDB:
+  mysql:
     driver: local
-  redisDB:
+  redis:
     driver: local
