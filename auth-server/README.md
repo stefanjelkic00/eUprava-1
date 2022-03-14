@@ -56,6 +56,21 @@ docker compose up -d
 
 Server is exposed at port 3101
 
+## Database seeding
+```console
+NODE_ENV=development npx nestjs-command seed:user --help
+NODE_ENV=development npx nestjs-command seed:admin --help
+```
+or
+```console
+# run before seeding first time
+docker compose run --rm install
+
+# commands
+docker compose run --rm seed-admin --help
+docker compose run --rm seed-user --help
+```
+
 ## Running the app
 
 ```bash

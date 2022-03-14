@@ -40,6 +40,17 @@ services:
   npm:
     <<: *direct-run-service
     entrypoint: npm
+  seed-admin:
+    <<: *direct-run-service
+    environment:
+      - NODE_ENV=docker-development
+    entrypoint: npx nestjs-command seed:admin
+  seed-user:
+    <<: *direct-run-service
+    environment:
+      - NODE_ENV=docker-development
+    entrypoint: npx nestjs-command seed:user
+
 volumes:
   nodemodules:
   mongodb:
