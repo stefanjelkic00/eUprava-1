@@ -28,6 +28,10 @@
 
 ## Installation
 
+### Auth flow diagram
+
+Found in `/docs/auth`
+
 ### Prerequisites
 
  - MongoDB server
