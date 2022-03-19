@@ -2,6 +2,7 @@ version: "3"
 
 x-base-service: &base-service
   build:
+    context: ./
     dockerfile: Dockerfile.dev
   volumes:
     - nodemodules:/usr/src/app/node_modules
