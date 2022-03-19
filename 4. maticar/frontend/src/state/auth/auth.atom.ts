@@ -1,3 +1,4 @@
+import { createStandaloneToast } from "@chakra-ui/react";
 import { atom, selector, selectorFamily } from "recoil";
 import localStorageEffect from "../effects.recoil";
 import authAxios from "./auth.axios";
@@ -56,7 +57,17 @@ const hasRoleSelector = selectorFamily<boolean, Role>({
         try {
             const response = await authAxios.get<AuthVerifyResponse>(`auth/verify_token/${token}`)
             const roles = response.data.user.roles
-            if (roles.includes(param)) return true
+            if (roles.includes(param)) {
+                const toast = createStandaloneToast()
+                toast({
+                    title: `Welcome ${response.data.user.firstName} ${response.data.user.lastName}.`,
+                    description: `You've logged in with roles ${roles.join(' ')}`,
+                    status: 'success',
+                    duration: 2000,
+                    isClosable: true,
+                  })
+                return true
+            }
             return false
         } catch (e) {
             return false
