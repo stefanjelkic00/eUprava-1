@@ -68,14 +68,14 @@ logger = logging.getLogger("main")
 
 
 def dev():
-    run("maticar.app.run:app", host="0.0.0.0", port=8080, reload=True, log_level=log_level.lower(), log_config=logging_config, debug=True)
+    run("maticar.app.run:app", host="0.0.0.0", port=4002, reload=True, log_level=log_level.lower(), log_config=logging_config, debug=True)
 
 
 def prod():
     run(
         "maticar.app.run:app",
         host="0.0.0.0",
-        port=80,
+        port=4002,
         log_level=log_level.lower(),
         log_config=logging_config,
         debug=develop,

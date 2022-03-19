@@ -4,6 +4,7 @@
   "version": "0.0.0",
   "scripts": {
     "dev": "vite",
+    "serve-docker": "vite --host 0.0.0.0",
     "build": "tsc && vite build",
     "preview": "vite preview"
   },
@@ -19,6 +20,9 @@
     "recoil": "^0.6.1",
     "recoil-nexus": "^0.3.15"
   },
+  "resolutions": {
+    "csstype": "^3.0.11"
+ },
   "devDependencies": {
     "@types/node": "^17.0.21",
     "@types/react": "^17.0.33",

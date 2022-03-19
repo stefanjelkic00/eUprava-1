@@ -4,8 +4,18 @@ networks:
   maticar:
     name: maticar
 
-
 services:
+  maticar-frontend:
+    build:
+      context: ./frontend/
+    container_name: maticar-frontend
+    networks:
+      maticar:
+        aliases:
+          - frontend
+    ports:
+      - "4001:4001"
+
   maticar:
     build:
       context: ./maticar-backend/
@@ -21,6 +31,7 @@ services:
       - SECRET
       - ALGORITHM
       - MYSQL_USER
+      - AUTH_SERVER_API
       - MYSQL_PASSWORD
       - MYSQL_DB
       - MYSQL_HOST
@@ -31,7 +42,7 @@ services:
         aliases:
           - app
     ports:
-      - "8080:80"
+      - "4002:4002"
     depends_on:
       mysql:
         condition: service_healthy
@@ -55,25 +66,6 @@ services:
         - ${MYSQL_HOST}
     healthcheck:
       test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
-      interval: 15s
-      timeout: 5s
-      retries: 3
-      start_period: 20s
-
-  redis:
-    image: redis:6.2.0
-    container_name: redis
-    command: redis-server --appendonly yes
-    volumes:
-      - redis:/data
-    ports:
-      - "6379:6379"
-    networks:
-      maticar:
-        aliases:
-        - ${REDIS_HOST}
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
       interval: 15s
       timeout: 5s
       retries: 3

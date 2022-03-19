@@ -33,6 +33,6 @@ COPY ./config /opt/app/config
 WORKDIR /opt/app
 RUN mkdir -p /opt/app/uploads
 RUN pip install -e .
-EXPOSE 80
+EXPOSE 4002
 
 CMD "/opt/app/config/run.sh"
