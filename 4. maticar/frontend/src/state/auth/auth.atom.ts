@@ -1,0 +1,67 @@
+import { atom, selector, selectorFamily } from "recoil";
+import localStorageEffect from "../effects.recoil";
+import authAxios from "./auth.axios";
+
+export type AuthVerifyResponse = {
+    claims: {
+        exp: number;
+        iat: number;
+        identityNumber: string;
+        roles: Array<string>;
+        sub: string;
+        username: string;
+    },
+    user: {
+        firstName: string;
+        lastName: string;
+        roles: Array<string>;
+        username: string;
+        __v: number;
+        _id: string;
+    }
+}
+
+const tokenAtom = atom({
+    key: 'tokenAtom',
+    default: "",
+    effects: [localStorageEffect('token')]
+})
+
+const isLoggedInSelector = selector({
+    key: 'isLoggedInSelector',
+    get: async ({ get }) => {
+        const token = get(tokenAtom)
+        if (!token) return false
+        let authenticated: boolean;
+        try {
+            const response = await authAxios.get<AuthVerifyResponse>(`auth/verify_token/${token}`)
+            if (response.status === 200)
+                authenticated = true
+            else authenticated = false
+        }
+        catch (e) {
+            authenticated = false
+        }
+        return authenticated
+    }
+})
+
+export type Role = "maticar_administrator" | "maticar_worker" | "maticar_user"
+
+const hasRoleSelector = selectorFamily<boolean, Role>({
+    key: 'hasRoleSelector',
+    get: (param: string) => async ({ get }) => {
+        const token = get(tokenAtom)
+        if (!token) return false
+        try {
+            const response = await authAxios.get<AuthVerifyResponse>(`auth/verify_token/${token}`)
+            const roles = response.data.user.roles
+            if (roles.includes(param)) return true
+            return false
+        } catch (e) {
+            return false
+        }
+    }
+})
+
+export { tokenAtom, isLoggedInSelector, hasRoleSelector };
