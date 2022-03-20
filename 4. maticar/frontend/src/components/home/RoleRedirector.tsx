@@ -11,15 +11,15 @@ const RoleRedirector = () => {
     const navigate = useNavigate()
 
     useEffect(() => {
-        navigate('/worker/panel')
+      if (isWorker) navigate('/worker/panel')
     }, [isWorker])
 
     useEffect(() => {
-        navigate('/admin/panel')
+      if (isAdmin) navigate('/admin/panel')
     }, [isAdmin])
 
     useEffect(() => {
-        navigate('/user/panel')
+      if (isUser) navigate('/user/panel')
     }, [isUser])
 
     return (

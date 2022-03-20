@@ -18,8 +18,8 @@ function App() {
           <Route path="token_handler" element={<TokenHandler />} />
           <Route path="logout_handler" element={<LogoutHandler />} />
         </Route>
-        <Route path="/" element={<Home />}>
-          <Route index element={<Welcome/>}></Route>
+        <Route element={<Home />}>
+          <Route index element={<Welcome/>}/>
           <Route path="p" element={<Protection />}>
             <Route path="profile" element={<Profile />}></Route>
           </Route>
