@@ -28,15 +28,39 @@ services:
   auth-app:
     <<: *auth-base-service
     command: node dist/main.js
-    ports:
-      - "3101:3101"
+    container_name: auth-app
     networks:
       tiseu:
         aliases:
           - auth-app
+    healthcheck:
+      test: [ "CMD", "CHECK_PORT=3101", "node", "healthcheck.js" ]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+
+  auth-app-proxy:
+    build:
+      context: ./auth-server/
+      dockerfile: Dockerfile.nginx
+    container_name: auth-app-proxy
+    environment:
+      - AUTH_APP_PROXY_PORT=3101
+      - AUTH_APP_PROXY_HOSTNAME=auth-app
+    networks:
+      tiseu:
+        aliases:
+          - auth-app-proxy
+    depends_on:
+      - "auth-app"
+    ports:
+      - "4101:4101"
+      - "4443:4443"
+
   auth-mongo:
     image: mongo
     restart: always
+    container_name: auth-mongo
     ports:
       - "27017:27017"
     volumes:
@@ -66,6 +90,7 @@ services:
     environment:
       - VITE_PORT=4001
       - VITE_APP_URL=http://localhost:4001
+      - VITE_AUTH_SERVER_URL=http://localhost:4101
       - VITE_BACKEND_URL=http://localhost:4002/api
     build:
       context: ./4. maticar/frontend/
@@ -88,7 +113,7 @@ services:
       - APP_VERSION=1
       - LOG_LEVEL=DEBUG
       - MYSQL_USER=root
-      - AUTH_SERVER_API=http://auth-app:3101
+      - AUTH_SERVER_API=http://auth-app-proxy:4101
       - MYSQL_PASSWORD=maticar123
       - MYSQL_DB=maticar
       - MYSQL_HOST=mysqlDB
