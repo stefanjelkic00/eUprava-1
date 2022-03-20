@@ -8,6 +8,7 @@ import Protection from "./components/routing/protected.route"
 import RolesProtection from "./components/routing/roles-protection.route"
 import UserPanel from "./components/user/UserPanel"
 import WorkerPanel from "./components/worker/WorkerPanel"
+import Welcome from "./components/welcome/Welcome";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <Route path="logout_handler" element={<LogoutHandler />} />
         </Route>
         <Route path="/" element={<Home />}>
+          <Route index element={<Welcome/>}></Route>
           <Route path="p" element={<Protection />}>
             <Route path="profile" element={<Profile />}></Route>
           </Route>
