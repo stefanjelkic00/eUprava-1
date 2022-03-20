@@ -5,6 +5,7 @@ import * as session from 'express-session';
 import { join } from 'path';
 import { MongoServerExceptionFilter } from './api/shared/exception/MongoServerExceptionFilter';
 import { MongoValidationErrorFilter } from './api/shared/exception/MongoValidationErrorFilter';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -29,6 +30,15 @@ async function bootstrap() {
       },
     }),
   );
+  const config = new DocumentBuilder()
+    .setTitle('Auth server')
+    .setDescription('Auth server API docs')
+    .setVersion('1.0')
+    .addTag('user')
+    .addTag('auth')
+    .build();
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('apidocs', app, document);
 
   await app.listen(3101);
 }

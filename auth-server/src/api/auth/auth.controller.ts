@@ -12,11 +12,13 @@ import {
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { AuthService } from './auth.service';
+import { ApiParam, ApiQuery } from '@nestjs/swagger';
 
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
+  @ApiQuery({ name: 'successUrl', type: 'string' })
   @Get('login')
   async renderLogin(
     @Session() session,
@@ -49,6 +51,7 @@ export class AuthController {
     return res.redirect(successUrl);
   }
 
+  @ApiQuery({ name: 'successUrl', type: 'string' })
   @Post('login')
   async login(
     @Req() req: Request,
