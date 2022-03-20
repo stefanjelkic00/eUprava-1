@@ -62,7 +62,7 @@ services:
     restart: always
     container_name: auth-mongo
     ports:
-      - "27017:27017"
+      - "4117:27017"
     volumes:
       - auth-mongodb:/data/db
     networks:
@@ -134,8 +134,9 @@ services:
     ports:
       - "4003:4003"
     environment:
-      MYSQL_ROOT_PASSWORD: "maticar123"
-      MYSQL_DATABASE: "maticar"
+      - MYSQL_TCP_PORT=4003
+      - MYSQL_ROOT_PASSWORD=maticar123
+      - MYSQL_DATABASE=maticar
     volumes:
       - maticar-mysql:/var/lib/mysql
       - ./4. maticar/init_db:/docker-entrypoint-initdb.d
