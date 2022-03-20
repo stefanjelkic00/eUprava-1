@@ -117,7 +117,7 @@ services:
       - MYSQL_PASSWORD=maticar123
       - MYSQL_DB=maticar
       - MYSQL_HOST=mysqlDB
-      - MYSQL_PORT=3306
+      - MYSQL_PORT=4003
     networks:
       tiseu:
         aliases:
@@ -132,7 +132,7 @@ services:
     image: mysql:8.0.23
     container_name: maticar-mysql
     ports:
-      - "3306:3306"
+      - "4003:4003"
     environment:
       MYSQL_ROOT_PASSWORD: "maticar123"
       MYSQL_DATABASE: "maticar"
