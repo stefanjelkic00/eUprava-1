@@ -1,8 +1,10 @@
-FROM node:16.13.2
-EXPOSE 4001
+FROM node:16.13.2 as build-stage
 WORKDIR /app
 COPY package.json package-lock.json /app/
-COPY .env /app/
 RUN npm install
 COPY ./ /app/
-CMD ["sh", "start.sh"]
+RUN npm run build
+
+FROM nginx:1.15
+COPY --from=build-stage /app/dist/ /usr/share/nginx/html
+COPY /nginx.conf /etc/nginx/conf.d/default.conf

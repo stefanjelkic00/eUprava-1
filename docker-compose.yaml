@@ -1,0 +1,138 @@
+version: "3.1"
+
+networks:
+  tiseu:
+    name: tiseu
+
+x-auth-base-service: &auth-base-service
+  build:
+    context: ./auth-server/
+    dockerfile: Dockerfile.prod
+  working_dir: /usr/src/app
+  environment:
+    - NODE_ENV=docker-development
+    - DB_NAME=auth-server
+    - DB_URI=mongodb://auth-mongo:27017
+    - JWT_SECRET=secret
+    - JWT_DURATION=120m
+
+x-auth-direct-run-service: &auth-direct-run-service
+  <<: *auth-base-service
+  profiles: [ "direct-run" ]
+  build:
+    context: ./auth-server/
+    dockerfile: Dockerfile.dev
+
+services:
+  # --- AUTH SERVER ---
+  auth-app:
+    <<: *auth-base-service
+    command: node dist/main.js
+    ports:
+      - "3101:3101"
+    networks:
+      tiseu:
+        aliases:
+          - auth-app
+  auth-mongo:
+    image: mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - auth-mongodb:/data/db
+    networks:
+      tiseu:
+        aliases:
+          - auth-mongo
+
+  auth-seed-admin:
+    <<: *auth-direct-run-service
+    entrypoint: npx nestjs-command seed:admin
+    networks:
+      tiseu:
+        aliases:
+          - auth-command-seed-admin
+  auth-seed-user:
+    <<: *auth-direct-run-service
+    entrypoint: npx nestjs-command seed:user
+    networks:
+      tiseu:
+        aliases:
+          - auth-command-seed-user
+
+  # --- MATICAR ---
+  maticar-frontend:
+    environment:
+      - VITE_PORT=4001
+      - VITE_APP_URL=http://localhost:4001
+      - VITE_BACKEND_URL=http://localhost:4002/api
+    build:
+      context: ./4. maticar/frontend/
+    container_name: maticar-frontend
+    networks:
+      tiseu:
+        aliases:
+          - frontend
+    ports:
+      - "4001:4001"
+
+  maticar:
+    build:
+      context: ./4. maticar/maticar-backend/
+      args:
+        - APP_VERSION
+    container_name: maticar
+    volumes:
+      - ./4. maticar/maticar-backend/htmlcov:/opt/app/htmlcov
+    environment:
+      - DEVELOP
+      - APP_VERSION
+      - LOG_LEVEL
+      - SECRET
+      - ALGORITHM
+      - MYSQL_USER
+      - AUTH_SERVER_API
+      - MYSQL_PASSWORD
+      - MYSQL_DB
+      - MYSQL_HOST
+      - MYSQL_PORT
+      - REDIS_HOST
+    networks:
+      tiseu:
+        aliases:
+          - maticar-app
+    ports:
+      - "4002:4002"
+    depends_on:
+      maticar-mysql:
+        condition: service_healthy
+
+  maticar-mysql:
+    image: mysql:8.0.23
+    container_name: maticar-mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DB}
+    volumes:
+      - maticar-mysql:/var/lib/mysql
+      - ./4. maticar/init_db:/docker-entrypoint-initdb.d
+    networks:
+      tiseu:
+        aliases:
+          - ${MYSQL_HOST}
+    healthcheck:
+      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+
+
+volumes:
+  auth-mongodb:
+    driver: local
+  maticar-mysql:
+    driver: local
