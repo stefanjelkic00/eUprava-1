@@ -1,5 +1,5 @@
 const Profile: React.FC = () => {
-    return <>PROFILE!!!</>
-}
+  return <>PROFILE!!!</>;
+};
 
-export default Profile
+export default Profile;

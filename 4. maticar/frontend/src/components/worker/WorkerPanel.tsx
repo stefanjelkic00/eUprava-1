@@ -1,9 +1,7 @@
-import React from 'react'
+import React from 'react';
 
 const WorkerPanel = () => {
-  return (
-    <div>WorkerPanel</div>
-  )
-}
+  return <div>WorkerPanel</div>;
+};
 
-export default WorkerPanel
+export default WorkerPanel;
