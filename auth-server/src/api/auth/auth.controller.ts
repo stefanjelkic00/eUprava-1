@@ -41,6 +41,7 @@ export class AuthController {
     }
   }
 
+  @ApiQuery({ name: 'successUrl', type: 'string' })
   @Get('logout')
   async logout(@Res() res: Response, @Query() query, @Session() session) {
     const { successUrl } = query;
