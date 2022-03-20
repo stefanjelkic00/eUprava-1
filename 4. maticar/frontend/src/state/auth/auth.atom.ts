@@ -74,7 +74,7 @@ const hasRoleSelector = selectorFamily<boolean, Role>({
           const toast = createStandaloneToast();
           toast({
             title: `Welcome ${response.data.user.firstName} ${response.data.user.lastName}.`,
-            description: `You've logged in with roles ${roles.join(' ')}`,
+            description: `You've logged in with roles ${roles.join(', ')}`,
             status: 'success',
             duration: 2000,
             isClosable: true,
