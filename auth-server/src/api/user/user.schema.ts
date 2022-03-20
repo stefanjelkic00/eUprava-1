@@ -1,5 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import * as bcrypt from 'bcrypt';
 import { Schema as MongooseSchema, Types } from 'mongoose';
+import * as uniqueValidator from 'mongoose-unique-validator';
 
 @Schema()
 export class User {
@@ -29,3 +31,20 @@ export class User {
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
+
+UserSchema.plugin(uniqueValidator, {
+  message: 'User with {PATH} already exists!',
+});
+
+UserSchema.pre('save', async function (next, opts) {
+  if (!this.isModified('password')) {
+    return next();
+  }
+  try {
+    const hashedPassword = await bcrypt.hash(this.get('password'), 12);
+    this.set('password', hashedPassword);
+    return next();
+  } catch (e) {
+    return next(e);
+  }
+});

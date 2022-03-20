@@ -70,7 +70,7 @@ export class UserCommand {
       username,
       roles: roles.split(','),
       firstName,
-      password: await bcrypt.hash(password, 12),
+      password,
       lastName,
       identityNumber,
     });
