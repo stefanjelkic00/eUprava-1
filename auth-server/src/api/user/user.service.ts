@@ -2,6 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { User } from './user.schema';
 import { Model, Document, ObjectId, Types } from 'mongoose';
+import { UserUpdateDto } from './user.dto';
 
 @Injectable()
 export class UserService {
@@ -54,5 +55,16 @@ export class UserService {
       );
     }
     return ret;
+  }
+
+  async updateUserById(id: string, user: UserUpdateDto) {
+    if (!Types.ObjectId.isValid(id)) {
+      throw new HttpException(
+        `Id ${id} is not valid ObjectId`,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    const foundUser = await this.userModel.findById(id).exec();
+    await foundUser.update(user).exec();
   }
 }
