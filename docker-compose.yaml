@@ -83,14 +83,10 @@ services:
       args:
         - APP_VERSION
     container_name: maticar
-    volumes:
-      - ./4. maticar/maticar-backend/htmlcov:/opt/app/htmlcov
     environment:
       - DEVELOP=true
       - APP_VERSION=1
       - LOG_LEVEL=DEBUG
-      - SECRET=please_please_update_me
-      - ALGORITHM=HS25 6
       - MYSQL_USER=root
       - AUTH_SERVER_API=http://auth-app:3101
       - MYSQL_PASSWORD=maticar123
