@@ -12,7 +12,7 @@ export class AuthService {
   ) {}
 
   async validateUser(username: string, password: string): Promise<User | null> {
-    const user = await this.userService.findByUsername(username);
+    const user = await this.userService.findByUsernameInternal(username);
     if (user && (await bcrypt.compare(password, user.password))) {
       return user;
     }
@@ -34,7 +34,7 @@ export class AuthService {
   }
 
   async findUserByUsername(username: string) {
-    const retVal = await this.userService.findByUsername(username);
+    const retVal = await this.userService.findByUsernameInternal(username);
     retVal.password = undefined;
     return retVal;
   }
