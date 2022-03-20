@@ -11,6 +11,7 @@ export class ConfigService {
 
     if (fs.existsSync(filePath)) {
       this.envConfig = {
+        ...process.env,
         ...this.envConfig,
         ...dotenv.parse(fs.readFileSync(filePath)),
       };
