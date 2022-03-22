@@ -2,7 +2,7 @@
 Projekat na nivou celog smera koji simulira elektronsku upravu.
 
 ## GIT PRAVILA
-1. Zabranjeno je pushovanje na MAIN granu, samo administrator će mergovati DEVELOPMENT i MAIN
+1. Zabranjeno je pushovanje na MAIN granu, samo administrator može da merge-uje DEVELOPMENT i MAIN
 2. Kolaboratori moraju praviti svoje posebne grane za svoje projekte i njihove feature-e
 3. Ako su kolaboratori zadovoljni sa svojim radom neka svoju granu merge-uju u DEVELOPMENT
 
