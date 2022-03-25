@@ -3,7 +3,7 @@ Projekat na nivou celog smera koji simulira elektronsku upravu.
 
 ## GIT PRAVILA
 1. Zabranjeno je pushovanje na MAIN granu, samo tim MATICAR ima access ka MAIN grani
-2. Kolaboratori moraju praviti svoje posebne grane za svoje projekte i njihove feature-e
+2. Kolaboratori moraju praviti svoje posebne grane za svoje projekte i praviti pull request za svaku promenu ka MAIN grani
 
 ## PRAVILNO PISANJE GIT KOMITOVA
   COMMIT-MESSAGE should:
