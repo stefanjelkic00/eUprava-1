@@ -57,6 +57,17 @@ export class UserService {
     return ret;
   }
 
+  async findByRole(role: string) {
+    const ret = await this.userModel.find({ 'roles': role }).exec();
+    if (!ret) {
+      throw new HttpException(
+        `Users by role ${role} not found`,
+        HttpStatus.NOT_FOUND,
+      );
+    }
+    return ret;
+  }
+
   async updateUserById(id: string, user: UserUpdateDto) {
     if (!Types.ObjectId.isValid(id)) {
       throw new HttpException(

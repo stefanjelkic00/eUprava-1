@@ -17,4 +17,4 @@ export REDIS_HOST=redis
 export REACT_APP_API=http://localhost:8080/api
 
 # Auth server
-export AUTH_SERVER_API=http://auth-app:3101
+export AUTH_SERVER_API=http://localhost:4101

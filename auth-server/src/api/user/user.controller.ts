@@ -16,6 +16,11 @@ export class UserController {
     return await this.service.findByUsername(username);
   }
 
+  @Get('find/role/:role')
+  async findByRole(@Param('role') role: string) {
+    return await this.service.findByRole(role);
+  }
+
   @Get('find/id/:id')
   async findById(@Param('id') id: string) {
     return await this.service.findById(id);
