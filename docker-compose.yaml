@@ -42,6 +42,7 @@ services:
       context: ./auth-server/
       dockerfile: Dockerfile.nginx
     container_name: auth-app-proxy
+    restart: on-failure
     environment:
       - AUTH_APP_PROXY_PORT=3101
       - AUTH_APP_PROXY_HOSTNAME=auth-app
