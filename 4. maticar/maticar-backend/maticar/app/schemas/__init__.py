@@ -4,8 +4,12 @@ from .common import (
     PaginationPage
 )
 
+from .admin import WorkerAddSchema, WorkerUpdateSchema
+
 __all__ = [
     "CheckName",
     "ErrorSchemaResp",
-    "PaginationPage"
+    "PaginationPage",
+    "WorkerAddSchema",
+    "WorkerUpdateSchema"
 ]

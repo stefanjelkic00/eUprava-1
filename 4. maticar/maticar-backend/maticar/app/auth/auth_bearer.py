@@ -42,9 +42,8 @@ class JWTBearer(HTTPBearer):
                     request.credentials = credentials
                     return credentials
             raise HTTPException(status_code=401, detail="Invalid token or expired token.")
-        except Exception as e:
-            logger.error(f"Error occured processing token. Error {str(e)}")
-            raise HTTPException(status_code=500, detail="Server error.")
+        except Exception:
+            raise HTTPException(status_code=403, detail="Invalid token.")
 
     def check_permissions(self, premissions, path):
         required = self.get_required_permission(path.split("/"))
